@@ -1,8 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bank_rest
+    username: postgres
+    password: valerii
+  jpa:
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    enabled: false
 #
 # application.yml — главный конфигурационный файл Spring Boot.
 
-Что нужно сделать:
-  - Указать настройки подключения к базе данных.
-  - Указать порт приложения.
-  - Настроить параметры безопасности и JWT.
-  - Включить Swagger UI.
+#Что нужно сделать:
+#  - Указать настройки подключения к базе данных.
+#  - Указать порт приложения.
+#  - Настроить параметры безопасности и JWT.
+#  - Включить Swagger UI.
