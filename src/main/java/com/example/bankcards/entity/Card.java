@@ -12,8 +12,12 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String number;
+    @Column(nullable = false)
     private String owner;
+    private BigDecimal balance;
+    @Column(nullable = false)
     private LocalDate expiryDate;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -37,7 +41,6 @@ public class Card {
         this.expiryDate = expiryDate;
     }
 
-    private BigDecimal balance;
 
     public Long getId() {
         return id;

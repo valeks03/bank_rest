@@ -14,4 +14,19 @@ public class CardMapper {
         return card;
     }
 
+    public static CardResponse toResponse(Card card) {
+
+        String mask = "*** **** **** " + card.getNumber().substring(card.getNumber().length() - 4);
+
+        return new CardResponse(
+                card.getId(),           //id
+                mask,                   //cardMask
+                card.getOwner(),        //owner
+                card.getBalance(),      //balance
+                card.getExpiryDate(),   //expiryDate
+                card.getStatus()        //status
+        );
+    }
+
+
 }
