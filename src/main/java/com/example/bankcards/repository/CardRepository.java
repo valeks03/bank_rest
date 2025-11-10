@@ -1,6 +1,5 @@
 package com.example.bankcards.repository;
 
-import com.example.bankcards.dto.card.CardResponse;
 import com.example.bankcards.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 
