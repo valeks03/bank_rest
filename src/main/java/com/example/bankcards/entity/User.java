@@ -17,8 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class User implements UserDetails {
-    @Id @GeneratedValue
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
 
@@ -31,6 +34,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        System.out.println("➡ getAuthorities() called for: " + username + ", role: " + role);
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 

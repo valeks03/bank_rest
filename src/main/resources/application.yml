@@ -11,6 +11,9 @@ spring:
       ddl-auto: update
   liquibase:
     enabled: false
+logging:
+  level:
+    org.springframework.security: DEBUG
 #
 # application.yml — главный конфигурационный файл Spring Boot.
 
