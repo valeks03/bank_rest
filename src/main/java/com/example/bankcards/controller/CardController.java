@@ -26,14 +26,7 @@ public class CardController {
 
     /// Реализация CRUD
 
-    @PostMapping("/newcard")
-    public ResponseEntity<CardResponse> createCard(@RequestBody CardRequest request) {
-        log.info("Receive request to create a new card");
-        CardResponse cardResponse = cardService.createCard(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(cardResponse);
-    }
 
 
     @GetMapping("/{id}")

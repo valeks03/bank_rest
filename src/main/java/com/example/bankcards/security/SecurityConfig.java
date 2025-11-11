@@ -29,10 +29,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers("/ping", "/auth/**").permitAll()
                         .requestMatchers("/cards/all").hasRole("ADMIN")
-
+                        .requestMatchers("/cards/**").hasRole("USER")
                         .anyRequest().authenticated())
-                .userDetailsService(userDetailsService)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .userDetailsService(userDetailsService);
 
 
         return http.build();
