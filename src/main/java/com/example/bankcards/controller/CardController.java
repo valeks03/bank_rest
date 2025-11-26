@@ -19,37 +19,24 @@ public class CardController {
     private static final Logger log = LoggerFactory.getLogger(CardController.class);
     private final CardService cardService;
 
-    @Autowired
     public CardController (CardService cardService) {
         this.cardService = cardService;
     }
 
-    /// Реализация CRUD
+
+    /// Этот метод вероятно тоже отправится к admin controller
+//    @GetMapping("/{id}")
+//    public ResponseEntity<CardResponse> getCardById(@PathVariable("id") Long id) {
+//        log.info("Called getCardById: id = {}", id);
+//        try {
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(cardService.getCard(id));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(404).build();
+//        }
+//    }
 
 
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CardResponse> getCardById(@PathVariable("id") Long id) {
-        log.info("Called getCardById: id = {}", id);
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(cardService.getCard(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
-        }
-    }
-
-    @GetMapping("all")
-    public ResponseEntity<List<CardResponse>> getAllCards() {
-        log.info("Called getAllCards");
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(cardService.getAllCards());
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
-        }
-    }
 
 
     @GetMapping
@@ -64,34 +51,5 @@ public class CardController {
             return ResponseEntity.status(404).build();
         }
     }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<CardResponse> updateCard (
-            @PathVariable Long id,
-            @RequestBody CardRequest request
-    ) {
-        log.info("Called update Card: id = {}", id);
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(cardService.updateCard(id, request));
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CardResponse> deleteCard (
-            @PathVariable Long id
-    ) {
-        log.info("Called delete card: id = {}", id);
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(cardService.deleteCard(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(404).build();
-        }
-    }
-
 
 }

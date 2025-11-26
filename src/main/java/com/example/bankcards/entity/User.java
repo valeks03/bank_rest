@@ -31,7 +31,6 @@ public class User implements UserDetails {
     @Builder.Default
     private boolean enabled = true;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         System.out.println("➡ getAuthorities() called for: " + username + ", role: " + role);
