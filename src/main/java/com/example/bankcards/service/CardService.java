@@ -54,6 +54,12 @@ public class CardService {
                 .toList();
     }
 
+    public CardResponse getCardById(Long id) {
+        Card card  = cardRepository.findCardById(id);
+        return CardMapper.toResponse(card);
+    }
+
+
 
     public CardResponse updateCard(Long id, CardRequest request) {
         Card existing = cardRepository.findById(id)

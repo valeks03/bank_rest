@@ -59,4 +59,11 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
+    public UserResponse getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        return userMapper.toResponse(user);
+    }
+
 }

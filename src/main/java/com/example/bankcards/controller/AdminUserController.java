@@ -5,6 +5,8 @@ import com.example.bankcards.dto.user.UserResponse;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.service.CardService;
 import com.example.bankcards.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Tag(name = "Controller for user control by admin")
 @RequestMapping("/admin/user")
 public class AdminUserController {
 
@@ -26,7 +29,7 @@ public class AdminUserController {
 //        this.cardService = cardService;
     }
 
-
+    @Operation(summary = "Get all existed users and admins")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         log.info("Called getAllUsers");
@@ -39,6 +42,7 @@ public class AdminUserController {
     }
 
 
+    @Operation(summary = "Create new user")
     @PostMapping()
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
         log.info("Called create user: username = {}", userRequest.username());
@@ -50,7 +54,7 @@ public class AdminUserController {
         }
     }
 
-
+    @Operation(summary = "Update new user by id")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
         log.info("Called update user: id = {}", id);
@@ -62,6 +66,7 @@ public class AdminUserController {
         }
     }
 
+    @Operation(summary = "Delete user by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<UserResponse> deleteUser(@PathVariable Long id) {
         log.info("Called delete user: id = {}", id);
@@ -73,4 +78,15 @@ public class AdminUserController {
         }
     }
 
+    @Operation(summary = "Get user by id")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+        log.info("Called get user: id = {}", id);
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(userService.getUserById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
 }
