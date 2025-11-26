@@ -57,10 +57,16 @@ public class CardController {
 
 
     @PostMapping("/transfer")
-    public ResponseEntity<Void> transfer(@RequestBody Transfer transfer,
+    public ResponseEntity<String> transfer(@RequestBody Transfer transfer,
                                          @AuthenticationPrincipal User user) {
-        cardService.transferBetweenOwnCards(transfer, user.getUsername());
-        return ResponseEntity.ok().build();
+        try {
+            cardService.transferBetweenOwnCards(transfer, user.getUsername());
+            return ResponseEntity.ok("Transfer is ");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 
 
