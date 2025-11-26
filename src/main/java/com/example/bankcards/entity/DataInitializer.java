@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
@@ -19,30 +21,16 @@ public class DataInitializer implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        userRepository.findByUsername("alex").ifPresentOrElse(
-                u -> System.out.println("ℹ️  User 'alex' уже существует"),
+        userRepository.findByUsername("ADMIN").orElseGet(
                 () -> {
                     User admin = User.builder()
-                            .username("alex")
-                            .password(passwordEncoder.encode("123456")) // В БД попадёт BCRYPT-хэш
+                            .username("ADMIN")
+                            .password(passwordEncoder.encode("ADMIN")) // В БД попадёт BCRYPT-хэш
                             .role(Role.ADMIN)
                             .enabled(true)
                             .build();
                     userRepository.save(admin);
-                    System.out.println("✅ Создан test-пользователь: alex / 123456 (ROLE_ADMIN)");
+                    return admin;
                 });
-        userRepository.findByUsername("john").ifPresentOrElse(
-                u -> System.out.println("User 'john' already exists"),
-                () -> {
-                    User user = User.builder()
-                            .username("john")
-                            .password(passwordEncoder.encode("123456"))
-                            .role(Role.USER)
-                            .enabled(true)
-                            .build();
-                    userRepository.save(user);
-                    System.out.println("✅ Создан test-пользователь: john / 123456 (ROLE_USER)");
-                }
-        );
     }
 }
