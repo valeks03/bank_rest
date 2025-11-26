@@ -103,10 +103,6 @@ public class CardService {
 
         from.setBalance(from.getBalance().subtract(transfer.amount()));
         to.setBalance(to.getBalance().add(transfer.amount()));
-        cardRepository.save(from);
-        cardRepository.save(to);
-        System.out.println("from before: " + from.getBalance());
-        System.out.println("to before: " + to.getBalance());
     }
 
 
