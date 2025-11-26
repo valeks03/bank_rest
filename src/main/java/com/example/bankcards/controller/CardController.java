@@ -1,13 +1,16 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.Transfer;
 import com.example.bankcards.dto.card.CardRequest;
 import com.example.bankcards.dto.card.CardResponse;
+import com.example.bankcards.entity.User;
 import com.example.bankcards.service.CardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,4 +55,30 @@ public class CardController {
         }
     }
 
+
+    @PostMapping("/transfer")
+    public ResponseEntity<Void> transfer(@RequestBody Transfer transfer,
+                                         @AuthenticationPrincipal User user) {
+        cardService.transferBetweenOwnCards(transfer, user.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
+
+
+    @GetMapping("/my")
+    public ResponseEntity<List<CardResponse>> getMyCards(@AuthenticationPrincipal User user) {
+        log.info("Called getAllCards: owner = {}", user.getUsername());
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(cardService.getCardsByOwner(user.getUsername()));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CardResponse> getMyCard(@PathVariable Long id,
+                                             @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(cardService.getCardByOwnerAndId(id, user.getUsername()));
+    }
 }

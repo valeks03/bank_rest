@@ -1,5 +1,6 @@
 package com.example.bankcards.service;
 
+import com.example.bankcards.dto.Transfer;
 import com.example.bankcards.dto.card.CardMapper;
 import com.example.bankcards.dto.card.CardRequest;
 import com.example.bankcards.dto.card.CardResponse;
@@ -9,6 +10,7 @@ import com.example.bankcards.repository.CardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,17 +40,6 @@ public class CardService {
     }
 
 
-    public CardResponse getCard(Long id) {
-        //TODO
-        //убрать null и добавить проверку для есть ли доступ у user (возможно в Controller придется делать)
-        Card card = null;
-        try {
-            card = repository.getReferenceById(id);
-        } catch (Exception e) {
-            throw new NoSuchElementException(e);
-        }
-        return CardMapper.toResponse(card);
-    }
 
     public List<CardResponse> getAllCards() {
         return cardRepository.findAll().stream()
@@ -90,5 +81,39 @@ public class CardService {
         existing.setStatus(Status.BLOCKED);
         cardRepository.save(existing);
         return CardMapper.toResponse(existing);
+    }
+
+    @Transactional
+    public void transferBetweenOwnCards(Transfer transfer, String username) {
+        if (transfer.fromCardId().equals(transfer.toCardId())) {
+            throw new IllegalArgumentException("It is forbidden to transfer betwwen one card");
+        }
+
+        Card from = cardRepository.findByIdAndOwner(transfer.fromCardId(), username)
+                .orElseThrow( () -> new NoSuchElementException("Source card not found or not yours"));
+
+        Card to = cardRepository.findByIdAndOwner(transfer.toCardId(), username)
+                .orElseThrow( () -> new NoSuchElementException("Target card not found or not yours"));
+        System.out.println("from before: " + from.getBalance());
+        System.out.println("to before: " + to.getBalance());
+
+        if (from.getBalance().compareTo(transfer.amount()) < 0) {
+            throw new RuntimeException("Insufficient funds");
+        }
+
+        from.setBalance(from.getBalance().subtract(transfer.amount()));
+        to.setBalance(to.getBalance().add(transfer.amount()));
+        cardRepository.save(from);
+        cardRepository.save(to);
+        System.out.println("from before: " + from.getBalance());
+        System.out.println("to before: " + to.getBalance());
+    }
+
+
+
+    public CardResponse getCardByOwnerAndId(Long cardId, String username) {
+        Card card = cardRepository.findByIdAndOwner(cardId, username)
+                .orElseThrow(() -> new RuntimeException("Card not found or not yours"));
+        return CardMapper.toResponse(card);
     }
 }
