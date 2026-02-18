@@ -20,11 +20,9 @@ import java.util.NoSuchElementException;
 public class CardService {
 
     private static final Logger log = LoggerFactory.getLogger(CardService.class);
-    private final CardRepository repository;
     private final CardRepository cardRepository;
 
     public CardService(CardRepository repository, CardRepository cardRepository) {
-        this.repository = repository;
         this.cardRepository = cardRepository;
     }
 
@@ -33,7 +31,7 @@ public class CardService {
         card.setStatus(Status.ACTIVE);
         card.setExpiryDate(LocalDate.now().plusYears(5));
         log.info("Create new card");
-        repository.save(card);
+        cardRepository.save(card);
         log.info("Saved new card in database");
 
         return CardMapper.toResponse(card);

@@ -11,3 +11,4 @@
 .idea/
 target/
 bank_rest.iml
+.DS_Store
